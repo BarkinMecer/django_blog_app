@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+
+{% block title %}Login{% endblock title %}
+
+
+
+
+{% block body %}
+    <h1>Login</h1>
+
+    <form method="POST">
+        {% csrf_token %}
+        {{form|crispy}}
+
+        {% if 'next' in request.GET %}
+            <input type="hidden" name="next" value="{{ request.GET.next }}"/>
+        {% endif %}
+
+        
+        <input class="btn btn-primary mb-2" type="submit" value="Login">
+        <p class="text-muted">Don't have an account? Let's <a href="{% url 'users:register' %}">Register!</a></p>
+    </form>
+{% endblock body %}

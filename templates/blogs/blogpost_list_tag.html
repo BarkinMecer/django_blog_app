@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}"{{tag}}"{% endblock title %}
+
+
+
+
+{% block body %}
+    
+
+<h1>"{{tag}}" Tag's Blog Posts</h1>
+<hr>
+
+{% if object_list %}
+    {% for blogpost in object_list %}
+
+        <article>
+
+            <p class="text-muted fst-italic mb-2"><a class="text-muted" href="{% url 'blogs:author_blogpost_list' blogpost.author.username %}">{{blogpost.author}}</a> &#183; {{blogpost.created_time}}</p>            
+            <h3 class="md-heading">
+                <a class="text-dark" href="{{blogpost.get_absolute_url}}">{{blogpost.title}}</a>
+                <a href=""><i data-slug="{{blogpost.slug}}" class="save-button text-dark fa fa-bookmark{% if not request.user in blogpost.saved_by.all %}-o{% endif %}" style="font-size:30px"></i></a>
+            </h3>
+            <p>{{blogpost.content|truncatechars:250}}... <span><a class="text-muted fst-italic" href="{{blogpost.get_absolute_url}}">read more</a></span></p>
+                                    
+            {% for tag in blogpost.tags.all %}
+                <a class="badge bg-secondary text-decoration-none text-light" href="{% url 'blogs:tag_blogpost_list' tag.slug %}">{{tag.name}}</a>
+            {% endfor %}
+
+        <br>                
+        </article>
+        <hr>
+    {% endfor %}
+{% else %}
+    <p style="font-size:22px;">It looks like there are no post here. <span><a href="{% url 'blogs:blogpost_create' %}">Let's create!</a></span></p>
+{% endif %}
+
+{% endblock body %}

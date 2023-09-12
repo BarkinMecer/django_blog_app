@@ -1,0 +1,35 @@
+
+
+    <!-- Comments section-->
+    <section class="mb-5">
+        <div class="card bg-light">
+            
+            <div class="card-body">
+                <!-- Comment form-->
+                <form id="create-comment" data-slug="{{object.slug}}" method="POST" class="mb-4">
+                    {% csrf_token %}
+                    <textarea id="form-input" class="form-control mb-2" name="text" placeholder="Leave a comment!" required></textarea>
+                    <button class="btn btn-outline-secondary" type='submit'>Save Comment</button>
+                </form>
+                <!-- Comment with nested comments-->
+                <h5>{{object.comment_set.all.count}} comments</h5><br>
+                {% for comment in object.comment_set.all %}
+                <div class="d-flex">
+                    <div class="ms-3">
+                        <h5 class="fw-bold">
+                            {{comment.user}}
+                            {% if comment.user == request.user %}
+                            <a href=""><i class="delete-comment fa fa-trash-o text-dark float-right" style="font-size:21px;margin-left:12px;"></i></a>
+                            <a href=""><i class="delete-cancel fa fa-times text-dark float-right" style="font-size:18px;margin-left:12px;" hidden></i></a>
+                            <a href=""><i data-id="{{comment.id}}" class="delete-accept fa fa-check text-dark float-right" style="font-size:18px;margin-left:12px;" hidden></i></a>
+                            {% endif %}
+                            <small style="margin-left: 16px;" class="form-text fst-italic text-muted float-right">{{comment.created_time}}</small>
+                        </h5>
+                        <p class="ml-3">{{comment.content}} </p>
+                    </div>
+                </div>
+                {% endfor %}
+
+            </div>
+        </div>
+    </section>

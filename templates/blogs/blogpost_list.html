@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}BlogPost App{% endblock title %}
+
+
+
+
+{% block body %}
+
+
+    <h1>Home</h1>
+    <hr>
+
+    {% if object_list %}
+        {% for blogpost in object_list %}
+
+            <article>
+
+                <p class="text-muted fst-italic mb-2"><a class="text-muted" href="{% url 'blogs:author_blogpost_list' blogpost.author.username %}">{{blogpost.author}}</a> &#183; {{blogpost.created_time}}</p>            
+                <h3 class="md-heading">
+                    <a class="text-dark" href="{{blogpost.get_absolute_url}}">{{blogpost.title}}</a>
+                    <a href=""><i data-slug="{{blogpost.slug}}" class="save-button text-dark fa fa-bookmark{% if not request.user in blogpost.saved_by.all %}-o{% endif %}" style="font-size:30px"></i></a>
+                </h3>
+                <p>{{blogpost.content|truncatechars:250}}... <span><a class="text-muted fst-italic" href="{{blogpost.get_absolute_url}}">read more</a></span></p>
+                                        
+                {% for tag in blogpost.tags.all %}
+                    <a class="badge bg-secondary text-decoration-none text-light" href="{% url 'blogs:tag_blogpost_list' tag.slug %}">{{tag.name}}</a>
+                {% endfor %}
+
+            <br>                
+            </article>
+            <hr>
+        {% endfor %}
+    {% else %}
+        <p style="font-size:22px;">
+            Hello from a regular BlogPost app. You've already know what are you going to do but if you don't; 
+            <a class="text-dark" href="{% url 'users:register' %}">Register</a>, 
+            <a class="text-dark" href="{% url 'users:login' %}">Login</a>, 
+            <a class="text-dark" href="{% url 'blogs:blogpost_create' %}">Create</a>! (
+            <a class="text-dark" href="{% url 'blogs:tag_create' %}">Tag creation </a> 
+            is also your job :))
+        </p>
+    {% endif %}
+
+
+
+{% endblock body %}

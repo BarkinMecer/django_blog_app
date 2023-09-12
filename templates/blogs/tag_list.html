@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}Tags{% endblock title %}
+
+
+
+
+{% block body %}
+
+    <h1>
+        Tags
+        <a href="{% url 'blogs:tag_create' %}"><button class="float-right btn btn-primary">Create Tag</button></a>
+    </h1>
+    <br>
+    <hr>
+
+    {% for tag in object_list %}
+
+        <h5 class="md-heading"><a class="text-dark" href="{{tag.get_absolute_url}}">{{tag.name}}</a></h5>               
+        <hr>
+
+    {% endfor %}
+
+{% endblock body %}

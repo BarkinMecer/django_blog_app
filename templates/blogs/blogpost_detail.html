@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}{{object.title}} {% endblock title %}
+
+
+
+
+{% block body %}
+    
+    <!-- Page content-->
+
+    <div class="row">
+        <!-- Post content-->
+        <article>
+            <!-- Post header-->
+            <header class="mb-4">
+                <!-- Post title-->             
+                                       
+                <h1 class="fw-bolder" >
+                    {{object.title}} 
+                    <a href=""><i data-slug="{{object.slug}}" class="save-button text-dark fa fa-bookmark{% if not request.user in object.saved_by.all %}-o{% endif %}" style="font-size:30px"></i></a>
+                </h1>
+                {% if object.author == request.user %}
+                    <div class="m2">
+                        <a href="{% url 'blogs:blogpost_update' object.slug %}"><button class="btn btn-primary">Update</button></a>
+                        <a href="{% url 'blogs:blogpost_delete' object.slug %}"><button class="btn btn-danger">Delete</button></a>
+                    </div>
+                {% endif %}
+                <!-- Post meta content-->
+                <div class="text-muted fst-italic mb-2">
+                    By <a class="text-muted" href="{% url 'blogs:author_blogpost_list' object.author.username %}">{{object.author}}</a><br>
+                    Posted on {{object.created_time}}<br>
+                    {% if object.created_time != object.last_updated_time %}Updated at {{object.last_updated_time}}{% endif %} 
+                </div>
+                <!-- Post categories-->
+                {% for tag in object.tags.all %}
+                <a class="badge bg-secondary text-decoration-none text-light" href="{% url 'blogs:tag_blogpost_list' tag.slug %}">{{tag.name}}</a>
+                {% endfor %}
+                
+            </header>
+            <br>
+
+            <!-- Post content-->
+            <section class="mb-5">
+                <p class="mb-4" style="font-size: 19px;">{{object.content | linebreaksbr}}</p>
+            </section>
+        </article>
+        <br>
+            
+    </div>
+
+    {% include 'blogs/comments.html' %}
+{% endblock body %}
